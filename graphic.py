@@ -33,25 +33,26 @@ def radians(degrees):
     return degrees / RAD
 
 def render_block(type, sides : list[str], color) -> str:
-    if type == 0: return '..'
-    elif type == 3: 
-        if 'top' in sides:
-            if 'left' in sides:
-                return color + '█▀' + CLEAR
+    match type:
+        case 0: return '..'
+        case 3: 
+            if 'top' in sides:
+                if 'left' in sides:
+                    return color + '█▀' + CLEAR
+                elif 'right' in sides:
+                    return color + '▀█' + CLEAR
+                return color + '▀▀' + CLEAR
+            elif 'bottom' in sides:
+                if 'left' in sides:
+                    return color + '█▄' + CLEAR
+                elif 'right' in sides:
+                    return color + '▄█' + CLEAR
+                return color + '▄▄' + CLEAR
+            elif 'left' in sides:
+                return color + '█ ' + CLEAR
             elif 'right' in sides:
-                return color + '▀█' + CLEAR
-            return color + '▀▀' + CLEAR
-        elif 'bottom' in sides:
-            if 'left' in sides:
-                return color + '█▄' + CLEAR
-            elif 'right' in sides:
-                return color + '▄█' + CLEAR
-            return color + '▄▄' + CLEAR
-        elif 'left' in sides:
-            return color + '█ ' + CLEAR
-        elif 'right' in sides:
-            return color + ' █'+ CLEAR
-    elif type == 2: return colorama.Fore.CYAN + '~~' + CLEAR
-    elif type == 1: return color + '██' + CLEAR
-    elif type == -1: return '  '
-    else: return colorama.Fore.RED + 'ER' + CLEAR
+                return color + ' █'+ CLEAR
+        case 2: return colorama.Fore.CYAN + '~~' + CLEAR
+        case 1: return color + '██' + CLEAR
+        case -1: return '  '
+        case _: return colorama.Fore.RED + 'ER' + CLEAR
