@@ -1,0 +1,17 @@
+Controls:
+Enter - accept
+Backspace - cancel
+W A S D - move
+Q E - rotate
+K - don't do anything
+
+Graphic:
+@@ - player
+██ - wall
+.. - floor
+$$ - NPC
+▄▄ - strogare (chest or pot)
+ER - error of graphic
+▲▲ - plant
+~~ - water
+░░ - glass
