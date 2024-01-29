@@ -1,7 +1,6 @@
 import colorama
 from objects import pos, Game
 from math import sin,cos,sqrt
-from numpy import ndarray
 from mathing import rad, fround
 from cons_ui import cls
 
@@ -31,7 +30,7 @@ STYLE = {'bold': colorama.Style.BRIGHT,
 
 def render_block(type, sides : list[str], color) -> str:
     match type:
-        case 0: return '..'
+        case 0:return color + '..' + CLEAR
         case 3: 
             if 'top' in sides:
                 if 'left' in sides:
@@ -54,7 +53,7 @@ def render_block(type, sides : list[str], color) -> str:
         case -1: return '  '
         case _: return colorama.Fore.RED + 'ER' + CLEAR
 
-def raycast(start : pos, angle : float, matrix : ndarray, step) -> list[pos]:
+def raycast(start : pos, angle : float, matrix : list, step) -> list[pos]:
     result = []
     for i in range(round(20 / step)):
         this_step = {}
@@ -68,13 +67,14 @@ def raycast(start : pos, angle : float, matrix : ndarray, step) -> list[pos]:
 
 def render_matrix(matrix : Game, player_pos : pos, see : str) -> None: # see ( w - see all, f - fast )
     cls()
-    arr = matrix.slice(player_pos, 11)
+    arr = matrix.map_slice(player_pos - pos(5, 4), 11, 9)
     print(f'╔══════════════════════╗')
     if 'w' in see:
-        for indi, row in enumerate(arr):
+        for y,row in enumerate(arr):
             print('║', end='')
-            for indj, el in enumerate(arr[row]):
-                print(render_block(el.any(),0,FORE['white']), end='')
+            for x,el in enumerate(row):
+                if y == 4 and x == 5:
+                    print('@@', end='')
+                else: print(render_block(el,0,FORE['green']), end='')
             print('║')
     print(f"╚══════════════════════╝")
-
