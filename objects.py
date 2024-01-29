@@ -21,8 +21,17 @@ class vector:
         return pos(x, y)
 
 class Game:
-    def __init__(self, chunk_count : int):
-        self.map = [[ [ 0 for _ in range(16)] for _ in range(16) ] for _ in range(chunk_count)]
-
+    def __init__(self, map):
+        self.map = map
     def get_element_by_pos(self, pos: pos) -> int:
-        return self.map[pos.y, pos.x]
+        return self.map[pos.y][pos.x]
+    def slice(self, posit : pos, diameter : int):
+        result = [[-1 for _ in range(diameter)] for _ in range(diameter) ]
+        for i in range(diameter):
+            for j in range(diameter):
+                result[i][j] = self.get_element_by_pos(pos(round(posit.x + j - diameter / 2), round(posit.y + i - diameter / 2)))
+        return np_arr(result)
+
+class Player:
+    def __init__(self, x : int, y : int):
+        self.pos = pos(x, y)
