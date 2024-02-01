@@ -1,21 +1,16 @@
-from objects import pos, Game, Player
-from graphic import render_matrix
+from objects import pos, Player, Map
 from datetime import datetime
-
-log = 'Caverned v0.0 test started\n'
-
-def logger(text):
-    global log
-    log += f'{datetime.now().strftime("%H:%M:%S")} - {text}\n'
+from keyboard import add_hotkey, wait
+from core import _key, moving
 
 map = [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -35,7 +30,20 @@ map = [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 ]
 
-game = Game(map)
-player = Player(7, 7)
+W = 24
+H = 24
 
-render_matrix(game, player.pos, 'w')
+def _init():
+    global world, player
+    player = Player(7,7)
+    world = Map(W, H)
+    world.content = map
+    add_hotkey('w', lambda: _key( lambda:moving('up',world,player), world, player))
+    add_hotkey('a', lambda: _key( lambda:moving('left',world,player), world, player))
+    add_hotkey('d', lambda: _key( lambda:moving('right',world,player), world, player))
+    add_hotkey('s', lambda: _key( lambda:moving('down',world,player), world, player))
+    add_hotkey('q', quit)
+
+_init()
+while True:
+    wait('w, a, s, d, q')

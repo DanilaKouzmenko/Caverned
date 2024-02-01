@@ -1,80 +1,13 @@
-import colorama
-from objects import pos, Game
-from math import sin,cos,sqrt
-from mathing import rad, fround
-from cons_ui import cls
+from objects import pos, Map
 
-colorama.just_fix_windows_console()
-colorama.init()
-
-CLEAR = colorama.Style.RESET_ALL
-FORE = {'black': colorama.Fore.BLACK,
-        'white': colorama.Fore.WHITE,
-        'blue':colorama.Fore.BLUE,
-        'green':colorama.Fore.GREEN,
-        'yellow':colorama.Fore.YELLOW,
-        'cyan':colorama.Fore.CYAN,
-        'purple':colorama.Fore.MAGENTA,
-        'red':colorama.Fore.RED,}
-BACK = {'black': colorama.Back.BLACK,
-        'white': colorama.Back.WHITE,
-        'blue': colorama.Back.BLUE,
-        'green': colorama.Back.GREEN,
-        'yellow': colorama.Back.YELLOW,
-        'cyan': colorama.Back.CYAN,
-        'purple': colorama.Back.MAGENTA,
-        'red': colorama.Back.RED}
-STYLE = {'bold': colorama.Style.BRIGHT,
-         'dim': colorama.Style.DIM,
-         'normal': colorama.Style.NORMAL}
-
-def render_block(type, sides : list[str], color) -> str:
-    match type:
-        case 0:return color + '..' + CLEAR
-        case 3: 
-            if 'top' in sides:
-                if 'left' in sides:
-                    return color + '█▀' + CLEAR
-                elif 'right' in sides:
-                    return color + '▀█' + CLEAR
-                return color + '▀▀' + CLEAR
-            elif 'bottom' in sides:
-                if 'left' in sides:
-                    return color + '█▄' + CLEAR
-                elif 'right' in sides:
-                    return color + '▄█' + CLEAR
-                return color + '▄▄' + CLEAR
-            elif 'left' in sides:
-                return color + '█ ' + CLEAR
-            elif 'right' in sides:
-                return color + ' █'+ CLEAR
-        case 2: return colorama.Fore.CYAN + '~~' + CLEAR
-        case 1: return color + '██' + CLEAR
-        case -1: return '  '
-        case _: return colorama.Fore.RED + 'ER' + CLEAR
-
-def raycast(start : pos, angle : float, matrix : list, step) -> list[pos]:
-    result = []
-    for i in range(round(20 / step)):
-        this_step = {}
-        x = round(cos(angle + 90) * (i + 1) * step)
-        y = round(sin(angle + 90) * (i + 1) * step)
-        if matrix[y, x] == 1:
-            this_step['pos'] = pos(x, y)
-            this_step['type'] = 1
-        result.append(this_step)
-    return result
-
-def render_matrix(matrix : Game, player_pos : pos, see : str) -> None: # see ( w - see all, f - fast )
-    cls()
-    arr = matrix.map_slice(player_pos - pos(5, 4), 11, 9)
-    print(f'╔══════════════════════╗')
-    if 'w' in see:
-        for y,row in enumerate(arr):
-            print('║', end='')
-            for x,el in enumerate(row):
-                if y == 4 and x == 5:
-                    print('@@', end='')
-                else: print(render_block(el,0,FORE['green']), end='')
-            print('║')
-    print(f"╚══════════════════════╝")
+def draw_matrix(matrix : Map, _pos : pos):
+    using = matrix.map_slice(_pos - pos(5, 4), 11, 9)
+    for y, row in enumerate(using.content):
+        for x, elem in enumerate(row):
+            if y == 4 and x == 5:
+                print('@@', end='')
+            elif elem == 1:
+                print('██', end='')
+            else:
+                print('..', end='')
+        print()
